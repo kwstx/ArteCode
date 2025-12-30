@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import P5Runtime from '$lib/components/P5Runtime.svelte';
-	import { generateSketch, DEFAULT_TEMPLATE } from '$lib/codeTemplate';
+	import { sceneToCode, DEFAULT_SCENE, type Scene } from '$lib/sceneModel';
 
-	let code = $state('');
+	// Scene is the source of truth
+	let scene = $state<Scene>(DEFAULT_SCENE);
 
-	onMount(() => {
-		code = generateSketch(DEFAULT_TEMPLATE);
-	});
+	// Code is derived from scene
+	let code = $derived(sceneToCode(scene));
 
 	function updateCode(e: Event) {
 		const target = e.target as HTMLTextAreaElement;
