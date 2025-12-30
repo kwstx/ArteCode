@@ -1,17 +1,13 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import P5Runtime from '$lib/components/P5Runtime.svelte';
+	import { generateSketch, DEFAULT_TEMPLATE } from '$lib/codeTemplate';
 
-	let code = $state(`function setup() {
-  createCanvas(windowWidth, windowHeight);
-  background(20);
-}
+	let code = $state('');
 
-function draw() {
-  // Draw colorful circles that follow the mouse
-  fill(random(255), random(255), random(255), 150);
-  noStroke();
-  ellipse(mouseX, mouseY, 50, 50);
-}`);
+	onMount(() => {
+		code = generateSketch(DEFAULT_TEMPLATE);
+	});
 
 	function updateCode(e: Event) {
 		const target = e.target as HTMLTextAreaElement;
