@@ -28,7 +28,7 @@
 	});
 
 	onDestroy(() => {
-		// cleanup if needed
+		window.removeEventListener('message', handleMessage);
 	});
 </script>
 

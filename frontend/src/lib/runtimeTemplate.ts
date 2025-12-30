@@ -8,15 +8,19 @@ export const htmlTemplate = (userCode: string) => `
   <script>
     window.onerror = (msg, url, line, col, error) => {
       window.parent.postMessage({ type: 'ERROR', message: msg, line }, '*');
+      return true;
     };
-    function run() {
-      try {
-        ${userCode}
-      } catch(e) {
-        window.parent.postMessage({ type: 'ERROR', message: e.message }, '*');
-      }
+    
+    window.addEventListener('unhandledrejection', (event) => {
+      window.parent.postMessage({ type: 'ERROR', message: event.reason }, '*');
+    });
+  </script>
+  <script>
+    try {
+      ${userCode}
+    } catch(e) {
+      window.parent.postMessage({ type: 'ERROR', message: e.message }, '*');
     }
-    window.onload = run;
   </script>
 </head>
 <body>

@@ -3,11 +3,13 @@
 
 	let code = $state(`function setup() {
   createCanvas(windowWidth, windowHeight);
-  background(220);
+  background(20);
 }
 
 function draw() {
-  fill(0, 0, 255);
+  // Draw colorful circles that follow the mouse
+  fill(random(255), random(255), random(255), 150);
+  noStroke();
   ellipse(mouseX, mouseY, 50, 50);
 }`);
 
