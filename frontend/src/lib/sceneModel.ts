@@ -83,9 +83,6 @@ export interface Scene {
     effects?: VisualEffect[]; // NEW: Visual effects
 }
 
-// Import visual effects types
-import type { VisualEffect } from './effectTypes';
-
 // ============================================
 // SCENE MANIPULATION
 // ============================================
@@ -322,8 +319,6 @@ function generateDraw(scene: Scene): string {
         if (element.type.kind !== 'background') {
             // Generate behavior block code first
             if (element.blocks && element.blocks.length > 0) {
-                // Import combineBlocks dynamically to avoid circular dependency
-                const { combineBlocks } = require('./behaviorBlocks');
                 const blockCode = combineBlocks(element.blocks, element);
                 lines.push(...blockCode);
             }
@@ -335,7 +330,6 @@ function generateDraw(scene: Scene): string {
 
     // Add visual effects at the end
     if (scene.effects && scene.effects.length > 0) {
-        const { generateEffectsCode } = require('./effectPresets');
         const effectsCode = generateEffectsCode(scene.effects);
         if (effectsCode.length > 0) {
             lines.push('');
