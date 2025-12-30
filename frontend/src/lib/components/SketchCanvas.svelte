@@ -168,31 +168,49 @@
 </script>
 
 <div class="sketch-canvas">
-	<h3>✏️ Sketch Your Idea</h3>
-	<p class="hint">Draw shapes on the canvas, then generate p5.js code from your sketch!</p>
+	<h3>Sketch Your Idea</h3>
+	<p class="hint">Draw shapes on the canvas, then generate p5.js code from your sketch</p>
 
 	<div class="tools">
 		<div class="tool-buttons">
 			<button class:active={currentTool === 'circle'} onclick={() => (currentTool = 'circle')}>
-				<span class="icon">○</span>
+				<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+					<circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5" />
+				</svg>
 				Circle
 			</button>
 			<button
 				class:active={currentTool === 'rectangle'}
 				onclick={() => (currentTool = 'rectangle')}
 			>
-				<span class="icon">□</span>
+				<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+					<rect x="2" y="2" width="12" height="12" stroke="currentColor" stroke-width="1.5" />
+				</svg>
 				Rectangle
 			</button>
 			<button class:active={currentTool === 'line'} onclick={() => (currentTool = 'line')}>
-				<span class="icon">/</span>
+				<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+					<line
+						x1="3"
+						y1="13"
+						x2="13"
+						y2="3"
+						stroke="currentColor"
+						stroke-width="1.5"
+						stroke-linecap="round"
+					/>
+				</svg>
 				Line
 			</button>
 		</div>
 
 		<div class="action-buttons">
-			<button onclick={handleUndo} disabled={shapes.length === 0} class="undo">↶ Undo</button>
-			<button onclick={handleClear} disabled={shapes.length === 0} class="clear"> 🗑️ Clear </button>
+			<button onclick={handleUndo} disabled={shapes.length === 0} class="secondary-button">
+				Undo
+			</button>
+			<button onclick={handleClear} disabled={shapes.length === 0} class="secondary-button">
+				Clear
+			</button>
 		</div>
 	</div>
 
@@ -218,8 +236,8 @@
 			{/if}
 		</div>
 
-		<button onclick={handleGenerate} class="generate" disabled={shapes.length === 0}>
-			🎨 Generate Code from Sketch
+		<button onclick={handleGenerate} class="primary-button" disabled={shapes.length === 0}>
+			Generate Code from Sketch
 		</button>
 	</div>
 </div>
@@ -228,20 +246,19 @@
 	.sketch-canvas {
 		padding: 1.5rem;
 		background: white;
-		border-radius: 8px;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 	}
 
 	h3 {
 		margin: 0 0 0.5rem 0;
-		font-size: 1.3rem;
-		color: #333;
+		font-size: 1rem;
+		font-weight: 600;
+		color: #1a1a1a;
 	}
 
 	.hint {
-		margin: 0 0 1rem 0;
+		margin: 0 0 1.25rem 0;
 		color: #666;
-		font-size: 0.9rem;
+		font-size: 0.875rem;
 	}
 
 	.tools {
@@ -259,45 +276,62 @@
 	}
 
 	button {
-		padding: 0.5rem 1rem;
-		border: 2px solid #ddd;
+		padding: 0.625rem 1rem;
+		border: 1px solid #1a1a1a;
 		background: white;
-		border-radius: 6px;
+		border-radius: 4px;
 		cursor: pointer;
-		font-size: 0.9rem;
+		font-size: 0.875rem;
 		font-weight: 500;
-		transition: all 0.2s;
+		transition: all 0.15s ease;
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
+		color: #1a1a1a;
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 	}
 
 	button:hover:not(:disabled) {
-		border-color: #0066ff;
-		background: #f0f7ff;
+		background: #1a1a1a;
+		color: #ffffff;
+	}
+
+	button:hover:not(:disabled) svg {
+		color: #ffffff;
 	}
 
 	button.active {
-		border-color: #0066ff;
-		background: #0066ff;
-		color: white;
+		background: #1a1a1a;
+		color: #ffffff;
+	}
+
+	button.active svg {
+		color: #ffffff;
 	}
 
 	button:disabled {
-		opacity: 0.5;
+		opacity: 0.3;
 		cursor: not-allowed;
+		border-color: #e5e5e5;
+		color: #999;
 	}
 
-	.icon {
-		font-size: 1.2rem;
-		line-height: 1;
+	button svg {
+		color: #1a1a1a;
+		transition: color 0.15s ease;
+	}
+
+	.secondary-button {
+		background: #ffffff;
+		border: 1px solid #1a1a1a;
 	}
 
 	.canvas-container {
-		border: 2px solid #ddd;
-		border-radius: 8px;
+		border: 1px solid #e5e5e5;
+		border-radius: 4px;
 		overflow: hidden;
 		margin-bottom: 1rem;
+		background: #fafafa;
 	}
 
 	canvas {
@@ -315,42 +349,19 @@
 	.summary {
 		flex: 1;
 		color: #666;
-		font-size: 0.9rem;
+		font-size: 0.875rem;
 	}
 
-	.generate {
-		padding: 0.75rem 1.5rem;
-		background: #4caf50;
-		color: white;
+	.primary-button {
+		padding: 0.75rem 1.25rem;
+		background: #1a1a1a;
+		color: #ffffff;
 		border: none;
-		font-size: 1rem;
-		font-weight: 600;
+		font-size: 0.875rem;
+		font-weight: 500;
 	}
 
-	.generate:hover:not(:disabled) {
-		background: #45a049;
-		border-color: #45a049;
-	}
-
-	.clear {
-		background: #f44336;
-		color: white;
-		border-color: #f44336;
-	}
-
-	.clear:hover:not(:disabled) {
-		background: #da190b;
-		border-color: #da190b;
-	}
-
-	.undo {
-		background: #ff9800;
-		color: white;
-		border-color: #ff9800;
-	}
-
-	.undo:hover:not(:disabled) {
-		background: #e68900;
-		border-color: #e68900;
+	.primary-button:hover:not(:disabled) {
+		background: #000000;
 	}
 </style>

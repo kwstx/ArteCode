@@ -30,7 +30,7 @@
 </script>
 
 <div class="effects-panel">
-	<h3>🎨 Visual Effects</h3>
+	<h3>Visual Effects</h3>
 	<p class="hint">Add visual effects to your sketch with simple controls</p>
 
 	<div class="effects-list">
