@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import aiRoutes from './routes/ai';
@@ -21,4 +22,7 @@ app.get('/health', (req, res) => {
 app.listen(PORT, () => {
     console.log(`🚀 ArteCode backend running on port ${PORT}`);
     console.log(`📡 AI endpoint: http://localhost:${PORT}/api/ai/generate`);
+    console.log(`📊 Usage stats: http://localhost:${PORT}/api/ai/usage`);
+    console.log(`⚡ Rate limit: ${process.env.RATE_LIMIT_MAX_REQUESTS || 50} requests per minute`);
+    console.log(`📅 Daily quota: ${process.env.DAILY_QUOTA || 1000} requests per day`);
 });

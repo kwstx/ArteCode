@@ -1,13 +1,15 @@
 import express from 'express';
 import { generateP5Code } from '../services/aiService';
 import { validateGeneratedCode } from '../utils/validation';
+import { rateLimitMiddleware, dailyQuotaMiddleware, getUsageStats } from '../middleware/rateLimit';
 
 const router = express.Router();
 
 /**
  * Generate p5.js code from natural language prompt
+ * Protected by rate limiting
  */
-router.post('/generate', async (req, res) => {
+router.post('/generate', rateLimitMiddleware, dailyQuotaMiddleware, async (req, res) => {
     try {
         const { prompt } = req.body;
 
@@ -56,6 +58,14 @@ router.post('/generate', async (req, res) => {
             message: error instanceof Error ? error.message : 'Unknown error'
         });
     }
+});
+
+/**
+ * Get usage statistics
+ */
+router.get('/usage', (req, res) => {
+    const stats = getUsageStats();
+    res.json(stats);
 });
 
 /**
