@@ -7,6 +7,9 @@
 
 import { generateSketch, type SketchTemplate } from './codeTemplate';
 import type { BehaviorBlock } from './behaviorBlocks';
+import type { VisualEffect } from './effectTypes';
+import { combineBlocks } from './behaviorBlocks';
+import { generateEffectsCode } from './effectPresets';
 
 // ============================================
 // TYPE DEFINITIONS
