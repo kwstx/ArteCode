@@ -1,46 +1,123 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import P5Runtime from '$lib/components/P5Runtime.svelte';
-	import { sceneToCode, DEFAULT_SCENE, type Scene } from '$lib/sceneModel';
+	import CanvasOverlay from '$lib/components/CanvasOverlay.svelte';
+	import Inspector from '$lib/components/Inspector.svelte';
+	import Toolbar from '$lib/components/Toolbar.svelte';
+	import {
+		sceneToCode,
+		DEFAULT_SCENE,
+		updateElement,
+		addElement,
+		removeElement,
+		type Scene,
+		type SceneElement
+	} from '$lib/sceneModel';
 
 	// Scene is the source of truth
 	let scene = $state<Scene>(DEFAULT_SCENE);
+	let selectedElementId = $state<string | null>(null);
 
 	// Code is derived from scene
 	let code = $derived(sceneToCode(scene));
 
-	function updateCode(e: Event) {
-		const target = e.target as HTMLTextAreaElement;
-		code = target.value;
+	// Selected element
+	let selectedElement = $derived(scene.elements.find((el) => el.id === selectedElementId) ?? null);
+
+	function handleSelect(id: string | null) {
+		selectedElementId = id;
+	}
+
+	function handleUpdate(id: string, updates: Partial<SceneElement>) {
+		scene = updateElement(scene, id, updates);
+	}
+
+	function handleAddCircle() {
+		const newCircle: SceneElement = {
+			id: `circle-${Date.now()}`,
+			type: { kind: 'circle', x: 400, y: 300, diameter: 50 },
+			style: {
+				fill: { mode: 'rgb', r: 100, g: 150, b: 255 },
+				noStroke: true
+			},
+			behavior: { kind: 'static' }
+		};
+		scene = addElement(scene, newCircle);
+		selectedElementId = newCircle.id;
+	}
+
+	function handleAddRectangle() {
+		const newRect: SceneElement = {
+			id: `rect-${Date.now()}`,
+			type: { kind: 'rectangle', x: 350, y: 250, width: 100, height: 80 },
+			style: {
+				fill: { mode: 'rgb', r: 255, g: 150, b: 100 },
+				noStroke: true
+			},
+			behavior: { kind: 'static' }
+		};
+		scene = addElement(scene, newRect);
+		selectedElementId = newRect.id;
+	}
+
+	function handleDelete() {
+		if (selectedElementId) {
+			scene = removeElement(scene, selectedElementId);
+			selectedElementId = null;
+		}
 	}
 </script>
 
-<div class="container">
-	<div class="editor">
-		<textarea value={code} oninput={updateCode}></textarea>
-	</div>
-	<div class="preview">
-		<P5Runtime {code} />
+<div class="app">
+	<Toolbar
+		onAddCircle={handleAddCircle}
+		onAddRectangle={handleAddRectangle}
+		onDelete={handleDelete}
+		hasSelection={selectedElementId !== null}
+	/>
+
+	<div class="main">
+		<div class="canvas-container">
+			<P5Runtime {code} />
+			<CanvasOverlay
+				{scene}
+				selectedId={selectedElementId}
+				onSelect={handleSelect}
+				onUpdate={handleUpdate}
+			/>
+		</div>
+
+		<Inspector
+			element={selectedElement}
+			onUpdate={(updates) => {
+				if (selectedElementId) {
+					handleUpdate(selectedElementId, updates);
+				}
+			}}
+		/>
 	</div>
 </div>
 
 <style>
-	.container {
+	.app {
 		display: flex;
+		flex-direction: column;
 		height: 100vh;
+		background: #f0f0f0;
 	}
-	.editor,
-	.preview {
+
+	.main {
+		display: flex;
 		flex: 1;
-		height: 100%;
+		overflow: hidden;
 	}
-	textarea {
-		width: 100%;
-		height: 100%;
-		font-family: monospace;
-		padding: 1rem;
-		resize: none;
-		border: none;
-		background: #f4f4f4;
+
+	.canvas-container {
+		flex: 1;
+		position: relative;
+		background: #ffffff;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
 	}
 </style>
