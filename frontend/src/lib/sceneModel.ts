@@ -80,7 +80,11 @@ export interface Scene {
     colorMode?: 'RGB' | 'HSB';
     frameRate?: number;
     elements: SceneElement[];
+    effects?: VisualEffect[]; // NEW: Visual effects
 }
+
+// Import visual effects types
+import type { VisualEffect } from './effectTypes';
 
 // ============================================
 // SCENE MANIPULATION
@@ -326,6 +330,16 @@ function generateDraw(scene: Scene): string {
 
             // Then generate element code
             lines.push(...generateElementCode(element));
+        }
+    }
+
+    // Add visual effects at the end
+    if (scene.effects && scene.effects.length > 0) {
+        const { generateEffectsCode } = require('./effectPresets');
+        const effectsCode = generateEffectsCode(scene.effects);
+        if (effectsCode.length > 0) {
+            lines.push('');
+            lines.push(...effectsCode);
         }
     }
 
