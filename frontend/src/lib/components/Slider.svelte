@@ -26,63 +26,73 @@
 
 <style>
 	.slider-control {
-		margin-bottom: 1rem;
+		margin-bottom: 1.25rem;
 	}
 
 	label {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin-bottom: 0.5rem;
-		font-size: 0.85rem;
+		margin-bottom: 0.75rem;
+		font-size: 0.75rem;
 	}
 
 	.label-text {
-		font-weight: 500;
-		color: #333;
+		font-weight: 700;
+		color: #000000;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
 	}
 
 	.value-display {
-		color: #666;
-		font-family: monospace;
-		font-size: 0.9rem;
+		color: #000000;
+		font-family: 'Space Grotesk', monospace;
+		font-size: 0.875rem;
+		font-weight: 700;
+		background: #000000;
+		color: #ffffff;
+		padding: 0.25rem 0.5rem;
+		border-radius: 0;
 	}
 
 	.slider {
 		width: 100%;
-		height: 6px;
-		border-radius: 3px;
-		background: #e0e0e0;
+		height: 8px;
+		border-radius: 0;
+		background: #e5e5e5;
 		outline: none;
 		-webkit-appearance: none;
+		border: 2px solid #000000;
 	}
 
 	.slider::-webkit-slider-thumb {
 		-webkit-appearance: none;
 		appearance: none;
-		width: 16px;
-		height: 16px;
-		border-radius: 50%;
-		background: #0066ff;
+		width: 20px;
+		height: 20px;
+		border-radius: 0;
+		background: #000000;
 		cursor: pointer;
-		transition: background 0.15s;
+		transition: background 0.1s;
+		border: 2px solid #000000;
 	}
 
 	.slider::-webkit-slider-thumb:hover {
-		background: #0052cc;
+		background: #ffffff;
+		border: 2px solid #000000;
 	}
 
 	.slider::-moz-range-thumb {
-		width: 16px;
-		height: 16px;
-		border-radius: 50%;
-		background: #0066ff;
+		width: 20px;
+		height: 20px;
+		border-radius: 0;
+		background: #000000;
 		cursor: pointer;
-		border: none;
-		transition: background 0.15s;
+		border: 2px solid #000000;
+		transition: background 0.1s;
 	}
 
 	.slider::-moz-range-thumb:hover {
-		background: #0052cc;
+		background: #ffffff;
 	}
 </style>
