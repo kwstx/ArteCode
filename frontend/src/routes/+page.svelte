@@ -105,7 +105,6 @@
 			}
 
 			const data = await response.json();
-			// For now, just show the code - in a full implementation, we'd update the scene
 			alert('Code generated! Check the console.');
 			console.log(data.code);
 		} catch (error) {
@@ -123,7 +122,6 @@
 	function loadExample(exampleId: string) {
 		const example = EXAMPLE_PROJECTS.find((ex) => ex.id === exampleId);
 		if (example) {
-			// For now, just show alert - full implementation would parse code to scene
 			alert(`Loading example: ${example.title}`);
 			console.log(example.code);
 		}
@@ -145,8 +143,10 @@
 
 <div class="app">
 	<header class="header">
-		<h1>🎨 ArteCode</h1>
-		<p>Create beautiful p5.js sketches without writing code</p>
+		<div class="header-content">
+			<h1>ArteCode</h1>
+			<p>Visual p5.js Editor</p>
+		</div>
 	</header>
 
 	<Toolbar
@@ -170,19 +170,65 @@
 		<div class="sidebar">
 			<div class="tabs">
 				<button class:active={currentTab === 'visual'} onclick={() => (currentTab = 'visual')}>
-					🎨 Visual
+					<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+						<rect x="2" y="2" width="12" height="12" stroke="currentColor" stroke-width="1.5" />
+						<circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.5" />
+					</svg>
+					Visual
 				</button>
 				<button class:active={currentTab === 'sketch'} onclick={() => (currentTab = 'sketch')}>
-					✏️ Sketch
+					<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+						<path
+							d="M2 14L6 2L10 14M4 10H8"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linecap="round"
+						/>
+					</svg>
+					Sketch
 				</button>
 				<button class:active={currentTab === 'ai'} onclick={() => (currentTab = 'ai')}>
-					🤖 AI
+					<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+						<circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5" />
+						<circle cx="6" cy="7" r="1" fill="currentColor" />
+						<circle cx="10" cy="7" r="1" fill="currentColor" />
+						<path
+							d="M6 10C6 10 7 11 8 11C9 11 10 10 10 10"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linecap="round"
+						/>
+					</svg>
+					AI
 				</button>
 				<button class:active={currentTab === 'effects'} onclick={() => (currentTab = 'effects')}>
-					✨ Effects
+					<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+						<path
+							d="M8 2L9 6L13 7L9 8L8 12L7 8L3 7L7 6L8 2Z"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linejoin="round"
+						/>
+					</svg>
+					Effects
 				</button>
 				<button class:active={currentTab === 'export'} onclick={() => (currentTab = 'export')}>
-					📦 Export
+					<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+						<path
+							d="M8 2V10M8 10L5 7M8 10L11 7"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+						<path
+							d="M2 12V13C2 13.5523 2.44772 14 3 14H13C13.5523 14 14 13.5523 14 13V12"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linecap="round"
+						/>
+					</svg>
+					Export
 				</button>
 			</div>
 
@@ -200,11 +246,11 @@
 					<SketchCanvas onGenerate={handleSketchGenerate} />
 				{:else if currentTab === 'ai'}
 					<div class="ai-panel">
-						<h3>🤖 AI Assistant</h3>
-						<p>Describe what you want to create:</p>
+						<h3>AI Assistant</h3>
+						<p>Describe what you want to create</p>
 						<textarea bind:value={aiPrompt} placeholder="e.g., Create a bouncing ball"></textarea>
-						<button onclick={handleAIGenerate} disabled={isGenerating}>
-							{isGenerating ? '⏳ Generating...' : '🎨 Generate Code'}
+						<button onclick={handleAIGenerate} disabled={isGenerating} class="primary-button">
+							{isGenerating ? 'Generating...' : 'Generate Code'}
 						</button>
 					</div>
 				{:else if currentTab === 'effects'}
@@ -218,28 +264,44 @@
 </div>
 
 <style>
+	* {
+		box-sizing: border-box;
+	}
+
 	.app {
 		display: flex;
 		flex-direction: column;
 		height: 100vh;
-		background: #f0f0f0;
+		background: #fafafa;
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+		color: #1a1a1a;
 	}
 
 	.header {
-		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-		color: white;
+		background: #ffffff;
+		border-bottom: 1px solid #e5e5e5;
+		padding: 0;
+	}
+
+	.header-content {
+		max-width: 1400px;
+		margin: 0 auto;
 		padding: 1.5rem 2rem;
-		text-align: center;
 	}
 
 	.header h1 {
 		margin: 0;
-		font-size: 2rem;
+		font-size: 1.5rem;
+		font-weight: 600;
+		color: #1a1a1a;
+		letter-spacing: -0.02em;
 	}
 
 	.header p {
-		margin: 0.5rem 0 0 0;
-		opacity: 0.9;
+		margin: 0.25rem 0 0 0;
+		font-size: 0.875rem;
+		color: #666;
+		font-weight: 400;
 	}
 
 	.main {
@@ -256,42 +318,61 @@
 		align-items: center;
 		justify-content: center;
 		overflow: hidden;
+		border-right: 1px solid #e5e5e5;
 	}
 
 	.sidebar {
-		width: 400px;
-		background: white;
+		width: 360px;
+		background: #ffffff;
 		display: flex;
 		flex-direction: column;
-		border-left: 1px solid #e0e0e0;
 	}
 
 	.tabs {
 		display: flex;
-		border-bottom: 1px solid #e0e0e0;
-		background: #f8f8f8;
+		border-bottom: 1px solid #e5e5e5;
+		background: #fafafa;
 	}
 
 	.tabs button {
 		flex: 1;
-		padding: 0.75rem 0.5rem;
+		padding: 0.875rem 0.5rem;
 		border: none;
 		background: none;
 		cursor: pointer;
-		font-size: 0.85rem;
+		font-size: 0.8125rem;
 		color: #666;
-		transition: all 0.2s;
+		transition: all 0.15s ease;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.375rem;
+		font-weight: 500;
+		letter-spacing: 0.01em;
+	}
+
+	.tabs button svg {
+		opacity: 0.6;
+		transition: opacity 0.15s ease;
 	}
 
 	.tabs button:hover {
-		background: #f0f0f0;
+		background: #f5f5f5;
+		color: #1a1a1a;
+	}
+
+	.tabs button:hover svg {
+		opacity: 1;
 	}
 
 	.tabs button.active {
-		background: white;
-		color: #0066ff;
-		font-weight: 600;
-		border-bottom: 2px solid #0066ff;
+		background: #ffffff;
+		color: #1a1a1a;
+		border-bottom: 2px solid #1a1a1a;
+	}
+
+	.tabs button.active svg {
+		opacity: 1;
 	}
 
 	.tab-content {
@@ -305,41 +386,62 @@
 
 	.ai-panel h3 {
 		margin: 0 0 0.5rem 0;
+		font-size: 1rem;
+		font-weight: 600;
+		color: #1a1a1a;
 	}
 
 	.ai-panel p {
-		margin: 0 0 1rem 0;
+		margin: 0 0 1.25rem 0;
 		color: #666;
+		font-size: 0.875rem;
 	}
 
 	.ai-panel textarea {
 		width: 100%;
-		min-height: 100px;
-		padding: 0.75rem;
-		border: 1px solid #ddd;
+		min-height: 120px;
+		padding: 0.875rem;
+		border: 1px solid #e5e5e5;
 		border-radius: 4px;
 		font-family: inherit;
+		font-size: 0.875rem;
 		resize: vertical;
 		margin-bottom: 1rem;
+		background: #fafafa;
+		color: #1a1a1a;
+		transition: all 0.15s ease;
 	}
 
-	.ai-panel button {
+	.ai-panel textarea:focus {
+		outline: none;
+		border-color: #1a1a1a;
+		background: #ffffff;
+	}
+
+	.ai-panel textarea::placeholder {
+		color: #999;
+	}
+
+	.primary-button {
 		width: 100%;
-		padding: 0.75rem;
-		background: #4caf50;
-		color: white;
+		padding: 0.875rem;
+		background: #1a1a1a;
+		color: #ffffff;
 		border: none;
 		border-radius: 4px;
-		font-weight: 600;
+		font-weight: 500;
+		font-size: 0.875rem;
 		cursor: pointer;
+		transition: all 0.15s ease;
+		letter-spacing: 0.01em;
 	}
 
-	.ai-panel button:hover:not(:disabled) {
-		background: #45a049;
+	.primary-button:hover:not(:disabled) {
+		background: #000000;
 	}
 
-	.ai-panel button:disabled {
-		opacity: 0.6;
+	.primary-button:disabled {
+		opacity: 0.5;
 		cursor: not-allowed;
 	}
 </style>
