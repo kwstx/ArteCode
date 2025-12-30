@@ -6,6 +6,7 @@
  */
 
 import { generateSketch, type SketchTemplate } from './codeTemplate';
+import type { BehaviorBlock } from './behaviorBlocks';
 
 // ============================================
 // TYPE DEFINITIONS
@@ -65,6 +66,7 @@ export interface SceneElement {
     type: ElementType;
     style: ElementStyle;
     behavior: ElementBehavior;
+    blocks?: BehaviorBlock[]; // NEW: Composable behavior blocks
 }
 
 /**
@@ -314,6 +316,15 @@ function generateDraw(scene: Scene): string {
     // Add all other elements
     for (const element of scene.elements) {
         if (element.type.kind !== 'background') {
+            // Generate behavior block code first
+            if (element.blocks && element.blocks.length > 0) {
+                // Import combineBlocks dynamically to avoid circular dependency
+                const { combineBlocks } = require('./behaviorBlocks');
+                const blockCode = combineBlocks(element.blocks, element);
+                lines.push(...blockCode);
+            }
+
+            // Then generate element code
             lines.push(...generateElementCode(element));
         }
     }
